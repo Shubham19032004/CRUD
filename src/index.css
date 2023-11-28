@@ -1,0 +1,181 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.Nav {
+  height: 3rem;
+  background-color: purple;
+  padding-top: 1rem;
+}
+.Nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+.Nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.3rem;
+}
+.Nav li {
+  margin-right: 140px;
+}
+
+.Form {
+  border: 1px solid rgba(222, 215, 215, 0.866);
+  width: 60rem;
+  height: 43rem;
+  margin: 2rem 13rem;
+  padding: 40px;
+  border-radius: 9px;
+}
+.Form:hover {
+  box-shadow: 0 0 10px rgba(142, 50, 142, 0.7);
+}
+.image {
+  width: 13rem;
+  height: 13rem;
+  border: 2px solid rgb(202, 202, 202);
+  position: absolute;
+  top: 10;
+  right: 19rem;
+  border-radius: 9px;
+}
+.image:hover {
+  box-shadow: 0 0 10px rgba(142, 50, 142, 0.7);
+}
+.input-form-image {
+  display: none; /* Hide the default input */
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 4rem 2rem;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  color: #333;
+  border-radius: 4px;
+  font-size: 16px;
+  border-radius: 3px;
+}
+
+.custom-file-upload:hover {
+  background-color: #e0e0e0;
+}
+
+.custom-file-upload i {
+  margin-right: 8px;
+}
+.formContent {
+  margin: 14px;
+  padding: 1rem;
+}
+.label {
+  font-size: 1.3rem;
+}
+.input-form {
+  width: 370px;
+  height: 2rem;
+  font-size: 1rem;
+  padding: 4px;
+  border-radius: 5px;
+  margin-left: 1rem;
+  border: 1px solid rgb(196, 196, 196);
+}
+.addButton {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 4px;
+  margin-left: 14rem;
+}
+.resuma {
+  display: none;
+}
+.form-button {
+  width: 8rem;
+  height: 3rem;
+  padding: 7px;
+  margin-left: 12rem;
+  background-color: purple;
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+.form-button:hover {
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  height: 40px;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+.tabel-div {
+  display: flex;
+}
+.displayimage {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+.backshadow {
+  margin: 5rem 6rem;
+  width: 50rem;
+  height: 35rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.backshadow .custom-modal {
+  width: 900px;
+  height: 600px;
+  background-color: #fff;
+  position: relative;
+}
+
+.delete-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: red;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-family: "Raleway", sans-serif;
+  z-index: 2;
+}
+.pdf {
+  width: 50rem;
+  height: 35rem;
+}
