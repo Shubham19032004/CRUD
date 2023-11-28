@@ -95,14 +95,6 @@ export default function Form() {
 
   // edit
   // Edit
-  const handleInputChange = (e) => {
-    setNewData(e.target.value);
-  };
-
-  const handleFieldChange = (e) => {
-    setField(e.target.value);
-  };
-
   const handleEdit = async () => {
     try {
       const personRef = doc(db, "data", editid);
@@ -232,9 +224,9 @@ export default function Form() {
       {isedit != false && (
           <div>
             <span>Field:</span>
-            <input type="text" value={field} onChange={handleFieldChange} />
+            <input type="text" value={field} onChange={(e)=>{setField(e.target.value);}} />
             <label>New Data: </label>
-            <input type="text" value={newData} onChange={handleInputChange} />
+            <input type="text" value={newData} onChange={(e)=>handleInputChange(e.target.value)} />
             <button onClick={handleEdit}>Edit Data</button>
           </div>
         )}
