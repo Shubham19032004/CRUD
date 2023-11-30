@@ -15,7 +15,7 @@ export default function Form() {
   const [isedit, setIsEdit] = useState(false);
   const [model, setModel] = useState(false);
   const [editid, setEditid] = useState("");
-  const [newData, handleInputChange] = useState("");
+  const [newData, setNewData] = useState("");
   const [field, setField] = useState("");
 
   const [search, setSearch] = useState("");
@@ -226,7 +226,7 @@ export default function Form() {
             <span>Field:</span>
             <input type="text" value={field} onChange={(e)=>{setField(e.target.value);}} />
             <label>New Data: </label>
-            <input type="text" value={newData} onChange={(e)=>{handleInputChange(e.target.value);}} />
+            <input type="text" value={newData} onChange={(e)=>{setNewData(e.target.value);}} />
             <button onClick={handleEdit}>Edit Data</button>
           </div>
         )}
