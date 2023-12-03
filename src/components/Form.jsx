@@ -1,77 +1,90 @@
-import { React, useState, Component, useEffect } from "react";
-import { doc, setDoc, addDoc } from "firebase/firestore";
+import { React, useState, useEffect } from "react";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { db, storage } from "../firebase/firebase";
+import readData from "../firebase/readData";
+import { ref, uploadBytes, listAll } from "firebase/storage";
 
-import { ref, uploadBytes } from "firebase/storage";
-export default function Form() {
+export default function Form(props) {
   const [isVisible, setIsVisible] = useState(false);
-  const [resuma, setResuma] = useState(null);
+  const [resume, setresume] = useState(null);
   const [image, setImage] = useState(null);
-
+  const [id, setId] = useState(props.id || nanoid());
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
     address: "",
-    phoneNo: "",
+    phoneNo: null,
     dataofb: "",
     email: "",
     qualification: "",
     id: null,
   });
   // dumping data in firebase
+  useEffect(() => {
+    async function fetchData() {
+      const record = await readData(id);
+      if (record !== null) {
+        setData({
+          firstname: record.firstname || "",
+          lastname: record.lastname || "",
+          address: record.address || 0,
+          email: record.email || "",
+          address: record.address || "",
+          phoneNo: record.phoneNo || "",
+          dataofb: record.dataofb || "",
+          qualification: record.qualification || "",
+          id: record.id || "",
+        });
+        setImage(record.image || null);
+        setresume(record.resume || null);
+      }
+    }
+    fetchData();
+  }, [id]);
   async function dumpData() {
-    const id = nanoid();
-    console.log(id);
     try {
-      // setData((prevData) => ({
-      //   ...prevData,
-      //   id:id,
-      // }));
-
       const docRef = doc(db, "data", id);
-
-      await setDoc(docRef, data);
       await setDoc(docRef, {
         ...data,
         id: id,
       });
+
       uploadimg(id);
-      uploadResuma(id);
-      console.log("Successfully stored data in Firestore");
+      uploadresume(id);
+      alert("Successfully stored data in Firestore");
     } catch (error) {
       console.log(error);
     }
-    handleDelete()
+    handleDelete();
   }
   // upload the image
-  function uploadimg(getid) {
+
+  async function uploadimg(getid) {
     if (image == null) return;
+
     const imageRef = ref(storage, `image/${getid}`);
-    uploadBytes(imageRef, image).then(() => {
-      console.log("image uploded");
-    });
+
+    uploadBytes(imageRef, image);
   }
-  function uploadResuma(getid) {
-    if (resuma == null) return;
-    const resumaRef = ref(storage, `resuma/${getid}`);
-    uploadBytes(resumaRef, resuma).then(() => {
-      console.log("resuma uploded");
-    });
+  async function uploadresume(getid) {
+    if (resume == null) return;
+    const resumeRef = ref(storage, `resume/${getid}`);
+    uploadBytes(resumeRef, resume);
+    const resumeList = await listAll(resumeRef.parent);
   }
+
   // saving value in setData
-  function handleChange(event) {
+  async function handleChange(event) {
     const { name, value, type } = event.target;
     setData((prev) => ({
       ...prev,
       [name]: type === "file" ? event.target.files[0] : value,
     }));
-
-    console.log(data);
   }
-  //save resuma
-  function sameResuma(event) {
-    setResuma(event.target.files[0]);
+  //save resume
+  function sameresume(event) {
+    setresume(event.target.files[0]);
   }
 
   // save image
@@ -81,17 +94,15 @@ export default function Form() {
   // delete data
   function handleDelete() {
     setData((prev) => ({
-      image: null,
       firstname: "",
       lastname: "",
       address: "",
+      dataofb: "",
       phoneNo: "",
       email: "",
       qualification: "",
-      resume: null,
       id: null,
     }));
-    console.log(data);
   }
   return (
     <div className="Form">
@@ -118,6 +129,7 @@ export default function Form() {
           placeholder="first-name"
           name="firstname"
           onChange={handleChange}
+          value={data.firstname}
         />
       </div>
       <div className="formContent">
@@ -130,6 +142,7 @@ export default function Form() {
           placeholder="last-name"
           name="lastname"
           onChange={handleChange}
+          value={data.lastname}
         />
       </div>
       <div className="formContent">
@@ -142,6 +155,7 @@ export default function Form() {
           placeholder="address-name"
           name="address"
           onChange={handleChange}
+          value={data.address}
         />
       </div>
       <div className="formContent">
@@ -153,6 +167,7 @@ export default function Form() {
           type="date"
           name="dataofb"
           onChange={handleChange}
+          value={data.dataofb}
         />
       </div>
       <div className="formContent">
@@ -165,6 +180,7 @@ export default function Form() {
           placeholder="Phone-No"
           name="phoneNo"
           onChange={handleChange}
+          value={data.phoneNo}
         />
       </div>
       <div className="formContent">
@@ -177,6 +193,7 @@ export default function Form() {
           placeholder="Email"
           name="email"
           onChange={handleChange}
+          value={data.email}
         />
       </div>
       <div>
@@ -197,15 +214,15 @@ export default function Form() {
         )}
       </div>
       <input
-        className="resuma"
+        className="resume"
         type="file"
-        name="resuma"
-        id="resumabox"
-        onChange={sameResuma}
+        name="resume"
+        id="resumebox"
+        onChange={sameresume}
       />
 
-      <label htmlFor="resumabox" className="custom-file-upload">
-        resuma
+      <label htmlFor="resumebox" className="custom-file-upload">
+        resume
       </label>
       <div>
         <button className="form-button" onClick={dumpData}>

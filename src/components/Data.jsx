@@ -1,65 +1,51 @@
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
-import {
-  ref,
-  uploadBytes,
-  deleteObject,
-  listAll,
-  getDownloadURL,
-} from "firebase/storage";
-export default function Form() {
-  const [tableData, setTableData] = useState([]);
+import Count from "./Count.jsx";
+import Form from "./Form.jsx";
+import { ref, deleteObject, listAll, getDownloadURL } from "firebase/storage";
+export default function Data() {
+  const [tableData, setTableData] = useState(null);
   const [imageList, setImageList] = useState([]);
-  const [resumaList, setResumaList] = useState([]);
+  const [resumeList, setresumeList] = useState([]);
   const [isedit, setIsEdit] = useState(false);
   const [model, setModel] = useState(false);
   const [editid, setEditid] = useState("");
-  const [newData, setNewData] = useState("");
-  const [field, setField] = useState("");
-
+  const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
   //Getting image
   const imageListRef = ref(storage, "image/");
   useEffect(() => {
-    listAll(imageListRef)
-      .then((response) => {
+    const imageFatch = async () => {
+      try {
+        const response = await listAll(imageListRef);
         const promises = response.items.map((item) => getDownloadURL(item));
-        return Promise.all(promises);
-      })
-      .then((urls) => {
+        const urls = await Promise.all(promises);
         setImageList(urls);
-        console.log(1);
-      })
-      .catch((error) => {
-        console.error("Error fetching images:", error);
-      });
+      } catch (error) {
+        console.error("Error fetching imageLisT:", error);
+      }
+    };
+    imageFatch();
   }, []);
+
+  // getting resume
+  const resumeListRef = ref(storage, "resume/");
   useEffect(() => {
-    // Fetch data when the component mounts
-    fetchData();
-  }, []);
-  // getting resuma
-  const resumaListRef = ref(storage, "resuma/");
-  useEffect(() => {
-    listAll(resumaListRef)
-      .then((response) => {
+    const fetchRData = async () => {
+      try {
+        const response = await listAll(resumeListRef);
         const promises = response.items.map((item) => getDownloadURL(item));
-        return Promise.all(promises);
-      })
-      .then((urls) => {
-        setResumaList(urls);
-        console.log(1);
-      })
-      .catch((error) => {
-        console.error("Error fetching images:", error);
-      });
+        const urls = await Promise.all(promises);
+        setresumeList(urls);
+      } catch (error) {
+        console.error("Error fetching resumeList:", error);
+      }
+    };
+
+    fetchRData();
   }, []);
-  useEffect(() => {
-    // Fetch data when the component mounts
-    fetchData();
-  }, []);
-  // Fetch data
+
   async function fetchData() {
     const collectionRef = collection(db, "data");
     const querySnapshot = await getDocs(collectionRef);
@@ -68,9 +54,13 @@ export default function Form() {
     querySnapshot.forEach((doc) => {
       data.push({ id: doc.id, ...doc.data() });
     });
-
     setTableData(data);
+    setCount(data.length);
   }
+  useEffect(() => {
+    // Fetch data when the component mounts
+    fetchData();
+  }, []);
 
   // delete
   async function handleDelete(personId) {
@@ -92,19 +82,6 @@ export default function Form() {
     }
     fetchData();
   }
-
-  // edit
-  // Edit
-  const handleEdit = async () => {
-    try {
-      const personRef = doc(db, "data", editid);
-      await updateDoc(personRef, { [field]: newData });
-      console.log("Data updated successfully!");
-      setIsEdit(false);
-    } catch (error) {
-      console.error("Error updating data:", error);
-    }
-  };
   // search
   const searchData = (e) => {
     e.preventDefault();
@@ -125,30 +102,28 @@ export default function Form() {
           }}
         />
         <button type="submit">search</button>
+        <Count data={count} />
       </form>
       <div className="tabel-div">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Address</th>
               <th>Data of B</th>
               <th>Email</th>
-
               <th>Phone No</th>
               <th>Qualification</th>
               <th>Image</th>
-              <th>Resuma</th>
+              <th>resume</th>
               <th>Edit</th>
               <th>delete</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((row) => (
+            {tableData?.map((row) => (
               <tr key={row.id}>
-                <td>{row.id}</td>
                 <td>{row.firstname}</td>
                 <td>{row.lastname}</td>
                 <td>{row.address}</td>
@@ -172,40 +147,34 @@ export default function Form() {
                     return null;
                   })}
                 </td>
+
                 <td>
-                  <td>
-                    {resumaList.map((url, index) => {
-                      const resumaName = `${row.id}`;
-                      if (url.includes(resumaName)) {
-                        return (
-                          <>
-                            <button
+                  {resumeList.map((url, index) => {
+                    const resumeName = `${row.id}`;
+                    if (url.includes(resumeName)) {
+                      return (
+                        <React.Fragment key={index}>
+                          <button onClick={() => setModel((prev) => !prev)}>
+                            download
+                          </button>
+                          {model === true && row.id === resumeName && (
+                            <embed
+                              type="application/pdf"
                               key={index}
                               src={url}
-                              alt={`${row.id}`}
-                              onClick={() => setModel((prev) => !prev)}
-                            >
-                              download
-                            </button>
-                            {model === true && row.id === resumaName && (
-                              <embed
-                                type="application/pdf"
-                                key={index}
-                                src={url}
-                                className="pdf"
-                              />
-                            )}
-                          </>
-                        );
-                      }
-                      return null;
-                    })}
-                  </td>
+                              className="pdf"
+                            />
+                          )}
+                        </React.Fragment>
+                      );
+                    }
+                    return null;
+                  })}
                 </td>
                 <td>
                   <button
                     onClick={() => {
-                      setIsEdit(true);
+                      setIsEdit((prev) => !prev);
                       setEditid(row.id);
                     }}
                   >
@@ -219,17 +188,8 @@ export default function Form() {
             ))}
           </tbody>
         </table>
-       
       </div>
-      {isedit != false && (
-          <div>
-            <span>Field:</span>
-            <input type="text" value={field} onChange={(e)=>{setField(e.target.value);}} />
-            <label>New Data: </label>
-            <input type="text" value={newData} onChange={(e)=>{setNewData(e.target.value);}} />
-            <button onClick={handleEdit}>Edit Data</button>
-          </div>
-        )}
+      {isedit && <Form id={editid} />}
     </>
   );
 }
