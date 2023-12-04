@@ -58,7 +58,6 @@ export default function Data() {
     setCount(data.length);
   }
   useEffect(() => {
-    // Fetch data when the component mounts
     fetchData();
   }, []);
 
