@@ -4,20 +4,23 @@ import { nanoid } from "nanoid";
 import { db, storage } from "../firebase/firebase";
 import readData from "../firebase/readData";
 import { ref, uploadBytes, listAll } from "firebase/storage";
-
-export default function Form(props) {
-  const [isVisible, setIsVisible] = useState(false);
+import { useParams, Link } from "react-router-dom";
+import Qualification from "./Qual.jsx";
+export default function Form() {
+  const params = useParams();
   const [resume, setresume] = useState(null);
   const [image, setImage] = useState(null);
-  const [id, setId] = useState(props.id || nanoid());
+  const [imgurl, setImgurl] = useState();
+  const [resumeurl, setResumeurl] = useState();
+  const [id, setId] = useState(params.Form!=="Form" ?params.Form: nanoid()  );
+  const [qualification, setQualification] = useState([]);
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
     address: "",
-    phoneNo: null,
+    phoneNo: "",
     dataofb: "",
     email: "",
-    qualification: "",
     id: null,
   });
   // dumping data in firebase
@@ -28,14 +31,14 @@ export default function Form(props) {
         setData({
           firstname: record.firstname || "",
           lastname: record.lastname || "",
-          address: record.address || 0,
+          address: record.address || "",
           email: record.email || "",
           address: record.address || "",
           phoneNo: record.phoneNo || "",
           dataofb: record.dataofb || "",
-          qualification: record.qualification || "",
           id: record.id || "",
         });
+        setQualification(record.Qualification || []);
         setImage(record.image || null);
         setresume(record.resume || null);
       }
@@ -48,6 +51,7 @@ export default function Form(props) {
       await setDoc(docRef, {
         ...data,
         id: id,
+        Qualification:qualification
       });
 
       uploadimg(id);
@@ -85,11 +89,13 @@ export default function Form(props) {
   //save resume
   function sameresume(event) {
     setresume(event.target.files[0]);
+    setResumeurl(URL.createObjectURL(event.target.files[0]));
   }
 
   // save image
   function sameImage(event) {
     setImage(event.target.files[0]);
+    setImgurl(URL.createObjectURL(event.target.files[0]));
   }
   // delete data
   function handleDelete() {
@@ -100,9 +106,9 @@ export default function Form(props) {
       dataofb: "",
       phoneNo: "",
       email: "",
-      qualification: "",
       id: null,
     }));
+    setQualification([])
   }
   return (
     <div className="Form">
@@ -113,10 +119,12 @@ export default function Form(props) {
           name="image"
           id="imageInput"
           onChange={sameImage}
+          accept=".jpg,.png,.jpeg,.jfif"
         />
+        <img src={imgurl} className=" inputimage" />
 
         <label htmlFor="imageInput" className="custom-file-upload">
-          <i className="fa fa-cloud-upload"></i> Choose Image
+          Choose Image
         </label>
       </div>
       <div className="formContent">
@@ -129,7 +137,8 @@ export default function Form(props) {
           placeholder="first-name"
           name="firstname"
           onChange={handleChange}
-          value={data.firstname}
+          value={data.firstname || ""}
+          required
         />
       </div>
       <div className="formContent">
@@ -142,7 +151,8 @@ export default function Form(props) {
           placeholder="last-name"
           name="lastname"
           onChange={handleChange}
-          value={data.lastname}
+          value={data.lastname || ""}
+          required
         />
       </div>
       <div className="formContent">
@@ -155,7 +165,8 @@ export default function Form(props) {
           placeholder="address-name"
           name="address"
           onChange={handleChange}
-          value={data.address}
+          value={data.address || ""}
+          required
         />
       </div>
       <div className="formContent">
@@ -167,7 +178,8 @@ export default function Form(props) {
           type="date"
           name="dataofb"
           onChange={handleChange}
-          value={data.dataofb}
+          value={data.dataofb || ""}
+          required
         />
       </div>
       <div className="formContent">
@@ -180,7 +192,8 @@ export default function Form(props) {
           placeholder="Phone-No"
           name="phoneNo"
           onChange={handleChange}
-          value={data.phoneNo}
+          value={data.phoneNo || ""}
+          required
         />
       </div>
       <div className="formContent">
@@ -193,25 +206,15 @@ export default function Form(props) {
           placeholder="Email"
           name="email"
           onChange={handleChange}
-          value={data.email}
+          value={data.email || ""}
+          required
         />
       </div>
       <div>
-        <button
-          className="addButton"
-          onClick={() => setIsVisible((prev) => !prev)}
-        >
-          {isVisible ? "-" : "+"}
-        </button>
-        {isVisible && (
-          <textarea
-            className="input-form"
-            type="text"
-            placeholder="qualification"
-            name="qualification"
-            onChange={handleChange}
-          />
-        )}
+        <Qualification
+          qualification={qualification}
+          setQualification={setQualification}
+        />
       </div>
       <input
         className="resume"
@@ -219,11 +222,17 @@ export default function Form(props) {
         name="resume"
         id="resumebox"
         onChange={sameresume}
-      />
+        accept=".pdf"  
+        required    
+
+        />
 
       <label htmlFor="resumebox" className="custom-file-upload">
         resume
       </label>
+      <Link target="_blank" to={resumeurl}>
+        reuma
+      </Link>
       <div>
         <button className="form-button" onClick={dumpData}>
           Submit

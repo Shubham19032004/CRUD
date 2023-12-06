@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import Count from "./Count.jsx";
-import Form from "./Form.jsx";
+import { Link } from "react-router-dom";
 import { ref, deleteObject, listAll, getDownloadURL } from "firebase/storage";
 export default function Data() {
   const [tableData, setTableData] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [resumeList, setresumeList] = useState([]);
-  const [isedit, setIsEdit] = useState(false);
   const [model, setModel] = useState(false);
-  const [editid, setEditid] = useState("");
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
   //Getting image
@@ -77,6 +75,16 @@ export default function Data() {
       await deleteObject(imageRef);
       console.log("Image deleted successfully");
     } catch (error) {
+      console.error("Error deleting image:", error);
+      return;
+    }
+    try {
+      const resumeName = `${personId}`;
+      const resumeRef = ref(storage, `resume/${resumeName}`);
+      await deleteObject(resumeRef);
+      console.log("Resume  deleted successfully");
+    } catch (error) {
+      console.error("Error deleting resume:", error);
       return;
     }
     fetchData();
@@ -129,7 +137,7 @@ export default function Data() {
                 <td>{row.dataofb}</td>
                 <td>{row.email}</td>
                 <td>{row.phoneNo}</td>
-                <td>{row.qualification}</td>
+                <td>{row.Qualification}</td>
                 <td>
                   {imageList.map((url, index) => {
                     const imageName = `${row.id}`;
@@ -171,14 +179,7 @@ export default function Data() {
                   })}
                 </td>
                 <td>
-                  <button
-                    onClick={() => {
-                      setIsEdit((prev) => !prev);
-                      setEditid(row.id);
-                    }}
-                  >
-                    Edit
-                  </button>
+                  <Link to={`../${row.id}`}>Edit</Link>
                 </td>
                 <td>
                   <button onClick={() => handleDelete(row.id)}>Delete</button>
@@ -188,7 +189,6 @@ export default function Data() {
           </tbody>
         </table>
       </div>
-      {isedit && <Form id={editid} />}
     </>
   );
 }

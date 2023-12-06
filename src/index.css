@@ -40,12 +40,16 @@
   top: 10;
   right: 19rem;
   border-radius: 9px;
+
 }
 .image:hover {
   box-shadow: 0 0 10px rgba(142, 50, 142, 0.7);
 }
 .input-form-image {
   display: none; /* Hide the default input */
+  width: 30rem;
+  height: 30rem;
+  background-color: black;
 }
 
 .custom-file-upload {
@@ -179,3 +183,10 @@ tr:hover {
   width: 50rem;
   height: 35rem;
 }
+ .inputimage {
+  width: 100%;
+  height: 100%;
+  /* border-radius: 4px;*/
+  z-index: -1;
+  position: absolute; 
+} 
