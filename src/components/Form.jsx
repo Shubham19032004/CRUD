@@ -12,7 +12,7 @@ export default function Form() {
   const [image, setImage] = useState(null);
   const [imgurl, setImgurl] = useState();
   const [resumeurl, setResumeurl] = useState();
-  const [id, setId] = useState(params.Form!=="Form" ?params.Form: nanoid()  );
+  const [id, setId] = useState(params.Form !== "Form" ? params.Form : nanoid());
   const [qualification, setQualification] = useState([]);
   const [data, setData] = useState({
     firstname: "",
@@ -21,12 +21,12 @@ export default function Form() {
     phoneNo: "",
     dataofb: "",
     email: "",
-    id: null,
+    Qualification: "",
   });
   // dumping data in firebase
   useEffect(() => {
     async function fetchData() {
-      const record = await readData(id);
+      const [record, imageurl, resumeurl] = await readData(id);
       if (record !== null) {
         setData({
           firstname: record.firstname || "",
@@ -36,22 +36,22 @@ export default function Form() {
           address: record.address || "",
           phoneNo: record.phoneNo || "",
           dataofb: record.dataofb || "",
-          id: record.id || "",
         });
         setQualification(record.Qualification || []);
-        setImage(record.image || null);
-        setresume(record.resume || null);
+        setImgurl(imageurl || null);
+        setResumeurl(resumeurl || null);
       }
     }
-    fetchData();
+    if (id) {
+      fetchData();
+    }
   }, [id]);
   async function dumpData() {
     try {
       const docRef = doc(db, "data", id);
       await setDoc(docRef, {
         ...data,
-        id: id,
-        Qualification:qualification
+        Qualification: qualification,
       });
 
       uploadimg(id);
@@ -106,9 +106,8 @@ export default function Form() {
       dataofb: "",
       phoneNo: "",
       email: "",
-      id: null,
     }));
-    setQualification([])
+    setQualification([]);
   }
   return (
     <div className="Form">
@@ -222,10 +221,9 @@ export default function Form() {
         name="resume"
         id="resumebox"
         onChange={sameresume}
-        accept=".pdf"  
-        required    
-
-        />
+        accept=".pdf"
+        required
+      />
 
       <label htmlFor="resumebox" className="custom-file-upload">
         resume

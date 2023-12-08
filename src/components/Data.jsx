@@ -179,7 +179,7 @@ export default function Data() {
                   })}
                 </td>
                 <td>
-                  <Link to={`../${row.id}`}>Edit</Link>
+                  <Link to={`/${row.id}`}>Edit</Link>
                 </td>
                 <td>
                   <button onClick={() => handleDelete(row.id)}>Delete</button>
