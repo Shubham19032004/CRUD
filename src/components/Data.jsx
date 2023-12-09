@@ -21,7 +21,7 @@ export default function Data() {
         const urls = await Promise.all(promises);
         setImageList(urls);
       } catch (error) {
-        console.error("Error fetching imageLisT:", error);
+        console.error("Error fetching imageList:", error);
       }
     };
     imageFatch();
@@ -58,8 +58,8 @@ export default function Data() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // delete
+  
+// delete
   async function handleDelete(personId) {
     try {
       const personRef = doc(db, "data", personId);
@@ -165,12 +165,14 @@ export default function Data() {
                             download
                           </button>
                           {model === true && row.id === resumeName && (
-                            <embed
-                              type="application/pdf"
-                              key={index}
-                              src={url}
+                            <embed 
+                               type="application/pdf"
+                               key={index}
+                               src={url}
                               className="pdf"
-                            />
+                             /> 
+
+
                           )}
                         </React.Fragment>
                       );
@@ -179,7 +181,7 @@ export default function Data() {
                   })}
                 </td>
                 <td>
-                  <Link to={`/${row.id}`}>Edit</Link>
+                  <Link to={`../${row.id}`}>Edit</Link>
                 </td>
                 <td>
                   <button onClick={() => handleDelete(row.id)}>Delete</button>

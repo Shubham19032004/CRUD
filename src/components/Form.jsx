@@ -8,11 +8,13 @@ import { useParams, Link } from "react-router-dom";
 import Qualification from "./Qual.jsx";
 export default function Form() {
   const params = useParams();
+  const id = params.Form;
+
+  const nanoID = nanoid();
   const [resume, setresume] = useState(null);
   const [image, setImage] = useState(null);
   const [imgurl, setImgurl] = useState();
   const [resumeurl, setResumeurl] = useState();
-  const [id, setId] = useState(params.Form !== "Form" ? params.Form : nanoid());
   const [qualification, setQualification] = useState([]);
   const [data, setData] = useState({
     firstname: "",
@@ -42,24 +44,43 @@ export default function Form() {
         setResumeurl(resumeurl || null);
       }
     }
-    if (id) {
+    if (id == "Form" || id == null) {
+      return;
+    } else {
       fetchData();
     }
   }, [id]);
   async function dumpData() {
-    try {
-      const docRef = doc(db, "data", id);
-      await setDoc(docRef, {
-        ...data,
-        Qualification: qualification,
-      });
+    if (id == "Form" || id == null) {
+      try {
+        const docRef = doc(db, "data", nanoID);
+        await setDoc(docRef, {
+          ...data,
+          Qualification: qualification,
+        });
 
-      uploadimg(id);
-      uploadresume(id);
-      alert("Successfully stored data in Firestore");
-    } catch (error) {
-      console.log(error);
+        uploadimg(nanoID);
+        uploadresume(nanoID);
+        alert("Successfully stored data in Firestore");
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const docRef = doc(db, "data", id);
+        await setDoc(docRef, {
+          ...data,
+          Qualification: qualification,
+        });
+
+        uploadimg(id);
+        uploadresume(id);
+        alert("Successfully stored data in Firestore");
+      } catch (error) {
+        console.log(error);
+      }
     }
+
     handleDelete();
   }
   // upload the image
@@ -68,7 +89,7 @@ export default function Form() {
     if (image == null) return;
 
     const imageRef = ref(storage, `image/${getid}`);
-
+    console.log(imageRef);
     uploadBytes(imageRef, image);
   }
   async function uploadresume(getid) {
@@ -229,7 +250,7 @@ export default function Form() {
         resume
       </label>
       <Link target="_blank" to={resumeurl}>
-        reuma
+        resume
       </Link>
       <div>
         <button className="form-button" onClick={dumpData}>

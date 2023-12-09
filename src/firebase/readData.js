@@ -7,10 +7,10 @@ async function readData(id) {
   const imageurls=await getDownloadURL(pathReference)
   const pathReferenceresume = ref(storage, `resume/${id}`);
   const resumeurls=await getDownloadURL(pathReferenceresume)
-
   if (docSnap.exists()) {
     return [docSnap.data(),imageurls,resumeurls];
-  } else {
+  }
+  else {
     return null;
   }
 }
