@@ -1,10 +1,11 @@
 * {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 .Nav {
-  height: 3rem;
-  background-color: purple;
+  height: 4rem;
+  background-color: black;
   padding-top: 1rem;
 }
 .Nav ul {
@@ -21,34 +22,19 @@
   margin-right: 140px;
 }
 
-.Form {
-  border: 1px solid rgba(222, 215, 215, 0.866);
-  width: 60rem;
-  height: 43rem;
-  margin: 2rem 13rem;
-  padding: 40px;
-  border-radius: 9px;
-}
-.Form:hover {
-  box-shadow: 0 0 10px rgba(142, 50, 142, 0.7);
-}
+
 .image {
   width: 13rem;
   height: 13rem;
   border: 2px solid rgb(202, 202, 202);
-  position: absolute;
   top: 10;
-  right: 19rem;
   border-radius: 9px;
 
 }
-.image:hover {
-  box-shadow: 0 0 10px rgba(142, 50, 142, 0.7);
-}
 .input-form-image {
-  display: none; /* Hide the default input */
-  width: 30rem;
-  height: 30rem;
+  display: none; 
+  width: 3rem;
+  height: 3rem;
   background-color: black;
 }
 
@@ -80,7 +66,7 @@
   font-size: 1.3rem;
 }
 .input-form {
-  width: 370px;
+  width: 13rem;
   height: 2rem;
   font-size: 1rem;
   padding: 4px;
@@ -139,54 +125,34 @@ tr:hover {
 .displayimage {
   width: 140px;
   height: 140px;
-  display: block;
-}
-.backshadow {
-  margin: 5rem 6rem;
-  width: 50rem;
-  height: 35rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position:absolute;
+  overflow: hidden;
 }
 
 .backshadow .custom-modal {
   width: 900px;
   height: 600px;
   background-color: #fff;
-  position: relative;
 }
 
-.delete-icon {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background-color: red;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  font-family: "Raleway", sans-serif;
-  z-index: 2;
-}
+
 .pdf {
   width: 50rem;
   height: 35rem;
 }
- .inputimage {
+
+.inputimage{
   width: 100%;
   height: 100%;
-  /* border-radius: 4px;*/
-  z-index: -1;
-  position: absolute; 
-} 
+
+
+}
+.Form{
+  margin-left:25rem ;
+  margin-top: 4rem;
+}
+.displayimage{
+  width: 50px;
+  height: 50px;
+  position: relative;
+}

@@ -1,6 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Form from "./Form.jsx";
 import Data from "./Data.jsx";
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function Home() {
   return (
     <BrowserRouter>

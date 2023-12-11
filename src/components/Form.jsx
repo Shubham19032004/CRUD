@@ -6,6 +6,7 @@ import readData from "../firebase/readData";
 import { ref, uploadBytes, listAll } from "firebase/storage";
 import { useParams, Link } from "react-router-dom";
 import Qualification from "./Qual.jsx";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 export default function Form() {
   const params = useParams();
   const id = params.Form;
@@ -129,11 +130,122 @@ export default function Form() {
       email: "",
     }));
     setQualification([]);
+    setImgurl();
+    setImage();
+    setResumeurl();
+    setresume();
   }
   return (
-    <div className="Form">
-      <div className="image">
+    <div className="Form  row">
+      <div className="col-lg-6">
+        <div className="formContent ">
+          <label htmlFor="firstname" className="label">
+            FirstName:
+          </label>
+          <input
+            className="input-form"
+            type="text"
+            placeholder="first-name"
+            name="firstname"
+            onChange={handleChange}
+            value={data.firstname || ""}
+            required
+          />
+        </div>
+        <div className="formContent">
+          <label htmlFor="lastname" className="label">
+            lastname:
+          </label>
+          <input
+            className="input-form"
+            type="text"
+            placeholder="last-name"
+            name="lastname"
+            onChange={handleChange}
+            value={data.lastname || ""}
+            required
+          />
+        </div>
+        <div className="formContent">
+          <label htmlFor="address" className="label">
+            Address:
+          </label>
+          <input
+            className="input-form"
+            type="text"
+            placeholder="address-name"
+            name="address"
+            onChange={handleChange}
+            value={data.address || ""}
+            required
+          />
+        </div>
+        <div className="formContent">
+          <label htmlFor="dataofb" className="label">
+            DOB:
+          </label>
+          <input
+            className="input-form"
+            type="date"
+            name="dataofb"
+            onChange={handleChange}
+            value={data.dataofb || ""}
+            required
+          />
+        </div>
+        <div className="formContent">
+          <label htmlFor="phoneNo" className="label">
+            Phone-NO:
+          </label>
+          <input
+            className="input-form"
+            type="number"
+            placeholder="Phone-No"
+            name="phoneNo"
+            onChange={handleChange}
+            value={data.phoneNo || ""}
+            required
+          />
+        </div>
+        <div className="formContent">
+          <label htmlFor="email" className="label">
+            Email:
+          </label>
+          <input
+            className="input-form"
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={handleChange}
+            value={data.email || ""}
+            required
+          />
+        </div>
+        <div>
+          <Qualification
+            qualification={qualification}
+            setQualification={setQualification}
+          />
+        </div>
         <input
+          className="resume"
+          type="file"
+          name="resume"
+          id="resumebox"
+          onChange={sameresume}
+          accept=".pdf"
+          required
+        />
+
+        <label htmlFor="resumebox" className="custom-file-upload">
+          resume
+        </label>
+        {resumeurl && (
+          <Link target="_blank" to={resumeurl}>
+            Resume
+          </Link>
+        )}
+                <input
           className="input-form-image"
           type="file"
           name="image"
@@ -141,118 +253,17 @@ export default function Form() {
           onChange={sameImage}
           accept=".jpg,.png,.jpeg,.jfif"
         />
-        <img src={imgurl} className=" inputimage" />
+       
 
         <label htmlFor="imageInput" className="custom-file-upload">
           Choose Image
         </label>
       </div>
-      <div className="formContent">
-        <label htmlFor="firstname" className="label">
-          FirstName:
-        </label>
-        <input
-          className="input-form"
-          type="text"
-          placeholder="first-name"
-          name="firstname"
-          onChange={handleChange}
-          value={data.firstname || ""}
-          required
-        />
-      </div>
-      <div className="formContent">
-        <label htmlFor="lastname" className="label">
-          lastname:
-        </label>
-        <input
-          className="input-form"
-          type="text"
-          placeholder="last-name"
-          name="lastname"
-          onChange={handleChange}
-          value={data.lastname || ""}
-          required
-        />
-      </div>
-      <div className="formContent">
-        <label htmlFor="address" className="label">
-          Address:
-        </label>
-        <input
-          className="input-form"
-          type="text"
-          placeholder="address-name"
-          name="address"
-          onChange={handleChange}
-          value={data.address || ""}
-          required
-        />
-      </div>
-      <div className="formContent">
-        <label htmlFor="dataofb" className="label">
-          DOB:
-        </label>
-        <input
-          className="input-form"
-          type="date"
-          name="dataofb"
-          onChange={handleChange}
-          value={data.dataofb || ""}
-          required
-        />
-      </div>
-      <div className="formContent">
-        <label htmlFor="phoneNo" className="label">
-          Phone-NO:
-        </label>
-        <input
-          className="input-form"
-          type="number"
-          placeholder="Phone-No"
-          name="phoneNo"
-          onChange={handleChange}
-          value={data.phoneNo || ""}
-          required
-        />
-      </div>
-      <div className="formContent">
-        <label htmlFor="email" className="label">
-          Email:
-        </label>
-        <input
-          className="input-form"
-          type="email"
-          placeholder="Email"
-          name="email"
-          onChange={handleChange}
-          value={data.email || ""}
-          required
-        />
-      </div>
-      <div>
-        <Qualification
-          qualification={qualification}
-          setQualification={setQualification}
-        />
-      </div>
-      <input
-        className="resume"
-        type="file"
-        name="resume"
-        id="resumebox"
-        onChange={sameresume}
-        accept=".pdf"
-        required
-      />
+      <div className="image col-lg-6 ">
+      <img src={imgurl} className=" inputimage" />
 
-      <label htmlFor="resumebox" className="custom-file-upload">
-        resume
-      </label>
-      <Link target="_blank" to={resumeurl}>
-        resume
-      </Link>
-      <div>
+      </div>
+      <div className="col-lg-12">
         <button className="form-button" onClick={dumpData}>
           Submit
         </button>
